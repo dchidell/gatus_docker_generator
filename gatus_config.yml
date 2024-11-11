@@ -1,0 +1,45 @@
+metrics: false
+endpoints:
+ 
+ - name: Google DNS
+   url: "8.8.8.8" 
+   group: DNS
+   dns:
+     query-name: "google.com"
+     query-type: "A"
+   conditions:
+     - "[DNS_RCODE] == NOERROR"
+   alerts:
+     - type: discord
+       enabled: true
+       send-on-resolved: true
+
+ - name: Cloudflare DNS
+   url: "1.1.1.1" 
+   group: DNS
+   dns:
+     query-name: "google.com"
+     query-type: "A"
+   conditions:
+     - "[DNS_RCODE] == NOERROR"
+   alerts:
+     - type: discord
+       enabled: true
+       send-on-resolved: true
+
+ - name: Local Router
+   url: icmp://10.2.1.1
+   group: network
+   conditions:
+    - "[CONNECTED] == true"
+   alerts:
+    - type: discord
+      enabled: true
+      send-on-resolved: true
+
+storage:
+  path: "postgres://gatus:gatus@gatuspostgres:5432/gatus?sslmode=disable"
+  type: postgres
+alerting:
+  discord: 
+    webhook-url: "https://discord.com/api/webhooks/1234567890/abcdefghijklmnopqrstuvwxyz"
